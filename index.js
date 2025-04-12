@@ -2,7 +2,9 @@ var $ = function (id) {
   return document.getElementById(id);
 };
 
+
 ////
+
 
 var users;
 
@@ -15,6 +17,10 @@ const msgTable = $("msg-template");
 msgTable.removeAttribute("id");
 const msgList = $("msg-list");
 msgTable.remove();
+
+
+////
+
 
 fetch("https://jsonplaceholder.typicode.com/users")
   .then((response) => response.json())
@@ -44,5 +50,3 @@ fetch("https://jsonplaceholder.typicode.com/users")
       msgList.append(msgTable.cloneNode(true));
     });
   });
-
-/////
