@@ -2,30 +2,26 @@ var $ = function (id) {
   return document.getElementById(id);
 };
 
-const msgTable = $("msg-template");
-msgTable.removeAttribute("id");
-const msgList = $("msg-list");
-msgTable.remove();
+////
+
+var users;
 
 const userTable = $("user-template");
 const userList = $("user-list");
 userTable.removeAttribute("id");
 userTable.remove();
 
-fetch("https://jsonplaceholder.typicode.com/posts")
-  .then((response) => response.json())
-  .then((json) => {
-    json.forEach((msg) => {
-      msgTable.children[0].textContent = msg.title;
-      msgTable.children[1].textContent = msg.body;
-      msgList.append(msgTable.cloneNode(true));
-    });
-  });
+const msgTable = $("msg-template");
+msgTable.removeAttribute("id");
+const msgList = $("msg-list");
+msgTable.remove();
 
 fetch("https://jsonplaceholder.typicode.com/users")
   .then((response) => response.json())
   .then((json) => {
-    console.log(json);
+    users = json.map((user) => {
+      return user.name;
+    });
 
     json.forEach((user) => {
       userTable.children[1].textContent = user.name;
@@ -35,4 +31,18 @@ fetch("https://jsonplaceholder.typicode.com/users")
       userTable.children[5].children[2].textContent = user.address.suite;
       userList.append(userTable.cloneNode(true));
     });
+
+    return fetch("https://jsonplaceholder.typicode.com/posts");
+  })
+  .then((response) => response.json())
+  .then((json) => {
+    json.forEach((msg) => {
+      let name = users[msg.userId - 1];
+      msgTable.children[0].textContent = msg.title;
+      msgTable.children[1].textContent = msg.body;
+      msgTable.children[2].textContent = name ?? "[NotFound]";
+      msgList.append(msgTable.cloneNode(true));
+    });
   });
+
+/////
