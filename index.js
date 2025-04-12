@@ -2,6 +2,10 @@ var $ = function (id) {
   return document.getElementById(id);
 };
 
+function capitalizeFirstLetter(line) {
+    return String(line).charAt(0).toUpperCase() + String(line).slice(1);
+}
+
 
 ////
 
@@ -25,6 +29,11 @@ msgTable.remove();
 fetch("https://jsonplaceholder.typicode.com/users")
   .then((response) => response.json())
   .then((json) => {
+
+    json = json.map((user) => {
+        return {name: capitalizeFirstLetter(user.name), email: user.email, address: user.address}
+    })
+
     users = json.map((user) => {
       return user.name;
     });
@@ -44,9 +53,9 @@ fetch("https://jsonplaceholder.typicode.com/users")
   .then((json) => {
     json.forEach((msg) => {
       let name = users[msg.userId - 1];
-      msgTable.children[0].textContent = msg.title;
-      msgTable.children[1].textContent = msg.body;
-      msgTable.children[2].textContent = name ?? "[NotFound]";
+      msgTable.children[0].textContent = capitalizeFirstLetter(msg.title);
+      msgTable.children[1].textContent = capitalizeFirstLetter(msg.body);
+      msgTable.children[2].textContent = (name ?? "[NotFound]");
       msgList.append(msgTable.cloneNode(true));
     });
   });
